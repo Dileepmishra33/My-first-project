@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Age Calculator dsds</title>
+
+  <style>
+    body {
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #ece9e6, #ffffff);
+      font-family: Arial, sans-serif;
+    }
+    .container {
+      background: silver;
+      padding: 25px;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      width: 340px;
+    }
+    h1 {
+      margin-bottom: 20px;
+      font-size: 24px;
+      color: green;
+    }
+    input {
+      padding: 10px;
+      width: 100%;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+      text-align: center;
+      margin-bottom: 15px;
+    }
+    input:focus {
+      border-color: #667eea;
+      outline: none;
+      box-shadow: 0 0 5px rgba(102,126,234,0.6);
+    }
+    button {
+      padding: 10px;
+      width: 100%;
+      border: none;
+      border-radius: 8px;
+      background: #667eea;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #5648c1;
+    }
+    #result {
+      margin-top: 20px;
+      font-size: 16px;
+      color: #222;
+      text-align: left;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+
+  <div class="container">
+    <h1>🧑 Age Calculator</h1>
+    <input type="text" id="dob" placeholder="DD/MM/YYYY">
+    <button onclick="calculateAge()">Calculate</button>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    function calculateAge() {
+      let dobInput = document.getElementById("dob").value.trim();
+      let regex = /^(\d{2})\/(\d{2})\/(\d{4})$/;
+
+      if (!regex.test(dobInput)) {
+        document.getElementById("result").innerText = "⚠️ Please enter DOB in DD/MM/YYYY format!";
+        return;
+      }
+
+      let parts = dobInput.split("/");
+      let day = parseInt(parts[0], 10);
+      let month = parseInt(parts[1], 10) - 1; // JS months 0–11
+      let year = parseInt(parts[2], 10);
+
+      let dob = new Date(year, month, day);
+      if (dob.getDate() !== day || dob.getMonth() !== month || dob.getFullYear() !== year) {
+        document.getElementById("result").innerText = "⚠️ Invalid Date!";
+        return;
+      }
+
+      let now = new Date();
+      if (dob > now) {
+        document.getElementById("result").innerText = "⚠️ DOB cannot be in the future!";
+        return;
+      }
+
+      let diffMs = now - dob;
+
+      let seconds = Math.floor(diffMs / 1000);
+      let minutes = Math.floor(seconds / 60);
+      let hours = Math.floor(minutes / 60);
+      let days = Math.floor(hours / 24);
+      let months = Math.floor(days / 30.44);
+      let years = Math.floor(months / 12);
+
+      document.getElementById("result").innerHTML = `
+        <strong>Your DOB:</strong> ${dobInput}<br><br>
+        <strong>Your Age:</strong><br>
+        📅 ${years} Years<br>
+        📆 ${months % 12} Months<br>
+        ☀️ ${days % 30} Days<br>
+        ⏰ ${hours % 24} Hours<br>
+        ⏳ ${minutes % 60} Minutes<br>
+        🕐 ${seconds % 60} Seconds
+      `;
+    }
+  </script>
+</body>
+</html>
